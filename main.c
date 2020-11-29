@@ -83,6 +83,10 @@ void originalFunction(char *root_path){
 
 int main(int argc, char *argv[argc+1]){
 
+    if (argc < 2){
+        printf("Error: folder path only ");
+        return 0;
+    }
 
     //searchRecursively(argv[1]);
     originalFunction(argv[1]);
