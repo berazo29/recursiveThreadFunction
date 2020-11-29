@@ -43,7 +43,7 @@ void* searchRecursively(void *arg){
             strcat(path, dp->d_name);
             INDEX++;
             pthread_create(&IDS[INDEX], NULL, searchRecursively, path);
-            printf("path=%s\n",path);
+            printf("ID %d\tpath=%s\n",INDEX, path);
 
             pthread_mutex_unlock(&mutex);
         }
@@ -88,8 +88,8 @@ int main(int argc, char *argv[argc+1]){
         return 0;
     }
 
-    //searchRecursively(argv[1]);
-    originalFunction(argv[1]);
+    searchRecursively(argv[1]);
+    //originalFunction(argv[1]);
 
     return 0;
 }
