@@ -41,13 +41,11 @@ void* searchRecursively(void *arg){
             strcpy(path, root_path);
             strcat(path, "/");
             strcat(path, dp->d_name);
-
-            pthread_create(&IDS[INDEX], NULL, searchRecursively, path);
             INDEX++;
+            pthread_create(&IDS[INDEX], NULL, searchRecursively, path);
             printf("path=%s\n",path);
 
             pthread_mutex_unlock(&mutex);
-
         }
     }
     closedir(dir);
@@ -58,11 +56,36 @@ void* searchRecursively(void *arg){
     pthread_exit(NULL);
 }
 
+void originalFunction(char *root_path){
+    char path[1000];
+    struct dirent *dp;
+    DIR *dir = opendir(root_path);
+
+    // Unable to open directory stream
+    if (!dir)
+        return;
+
+    while ((dp = readdir(dir)) != NULL)
+    {
+        if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0)
+        {
+            // Construct new path from our base path
+            strcpy(path, root_path);
+            strcat(path, "/");
+            strcat(path, dp->d_name);
+            printf("path=%s\n",path);
+            originalFunction(path);
+        }
+    }
+
+    closedir(dir);
+}
 
 int main(int argc, char *argv[argc+1]){
 
 
-    searchRecursively(argv[1]);
+    //searchRecursively(argv[1]);
+    originalFunction(argv[1]);
 
     return 0;
 }
